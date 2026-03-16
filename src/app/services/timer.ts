@@ -16,6 +16,7 @@ export class Timer implements OnDestroy{
     sessionsBeforeLongBreak: 4
   })
 
+  
   // Timer Status
   private state = signal<TimerState>({
     mode: 'pomodoro',
