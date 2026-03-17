@@ -13,7 +13,9 @@
             [class.shadow-md]="timer.timerState().mode === mode.key"
             [class.text-slate-500]="timer.timerState().mode !== mode.key"
             (click)="switchMode(mode.key)"
-            ></button>
+            >
+            {{ mode.label }}
+            </button>
         }
     </div>
 
