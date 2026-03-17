@@ -64,7 +64,7 @@ export class Timer implements OnDestroy{
   });
 
   //Lable for button to start or pause the timer
-  readonly buttonLable = computed(() => {
+  readonly buttonLabel = computed(() => {
     const status = this.state().status;
     switch(status){
       case 'idle': return 'Start';

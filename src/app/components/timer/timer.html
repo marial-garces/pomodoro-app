@@ -1,1 +1,49 @@
-<p>timer works!</p>
+<!-- Tarjetica del timer cutesie -->
+<section class="bg-white rounded-2xl border border-slate-200/60 p-8
+                flex flex-col items-center shadow-md">
+    <!-- MOD TABSS -->
+    <div class="flex bg-slate-100 rounded-xl p-1 gap-1">
+
+        <!-- Logic of changing modes colors ans style :D -->
+        @for (mode of modes; track mode.key) {
+            <button
+            class="px-5 py-2 text-sm font-medium rounded-lg transition-all"
+            [class.bg-white]="timer.timerState().mode === mode.key"
+            [class.text-green-600]="timer.timerState().mode === mode.key"
+            [class.shadow-md]="timer.timerState().mode === mode.key"
+            [class.text-slate-500]="timer.timerState().mode !== mode.key"
+            (click)="switchMode(mode.key)"
+            ></button>
+        }
+    </div>
+
+    <!-- EL TIMER DISPLAAAY -->
+    <div class="mt-10 mb-4">
+        <span class="text-8xl font-bold text-slate-900 font-mono tracking-tighter">
+            {{ timer.displayTime() }}:{{ timer.displaySeconds()}}
+        </span>
+    </div>
+
+    <!-- Modes labeeels -->
+    <p class="text-sm font-medium tracking-widest text-slate-400 uppercase mb-8">
+        {{ timer.modeLable() }}
+    </p>
+
+    <!-- START AND PAUSE btn :D -->
+    <button
+        class="px-16 py-4 text-white text-lg font-bold tracking-wider rounded-xl
+               transition-all"
+        [class.bg-green-600]="timer.timerState().status !== 'running'"
+        [class.bg-slate-700]="timer.timerState().status === 'running'"
+        (click)="toggleTimer()">
+        {{ timer.buttonLabel() }}
+    </button>
+
+    <!-- RESET BTN -->
+    <button 
+        class="mt-4 flex items-center gap-2 text-sm text-green-600
+            hover:text-green-700 transition-colors"
+        (click)="resetTimer()">
+        ↻ Reset Timer    
+    </button>
+</section>
