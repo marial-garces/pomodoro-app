@@ -45,13 +45,13 @@ export class Timer implements OnDestroy{
     return ((total - this.state().timeRemaining) / total) * 100;
   });
 
-  readonly displayTime = computed(() => {
+  readonly displayMinutes = computed(() =>
     String(this.minutes()).padStart(2, '0')
-  });
+  );
 
-  readonly displaySeconds = computed(() => {
+  readonly displaySeconds = computed(() =>
     String(this.seconds()).padStart(2, '0')
-  });
+  );
 
   //Lable for the current modes !
   readonly modeLable = computed(() => {
