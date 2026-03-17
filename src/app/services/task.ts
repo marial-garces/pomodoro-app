@@ -24,4 +24,14 @@ export class TaskService {
   }
 
   // DELEEEEEETE
+  removeTask(id: string): void {
+    this.tasks.update(tasks => tasks.filter(t => t.id !== id));
+  }
+
+  // completed something
+  toggleComplete(id: string): void {
+    this.tasks.update(tasks =>
+      tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t)
+    );
+  }
 }
