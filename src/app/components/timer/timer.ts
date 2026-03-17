@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Timer as TimerService } from '../../services/timer';
+import { TaskList } from '../task-list/task-list';
 
 @Component({
   selector: 'app-timer',
-  imports: [],
+  imports: [TaskList],
   templateUrl: './timer.html',
   styleUrl: './timer.css',
 })

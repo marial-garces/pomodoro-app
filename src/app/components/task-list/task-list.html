@@ -1,1 +1,35 @@
-<p>task-list works!</p>
+<section class="mt-8">
+    
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-slate-800">Current Tasks</h2>
+        <button class="text-sm font-semibold text-green-600 hover:text-green-700"
+                (click)="openInput()">
+            + Add Task
+        </button>
+    </div>
+
+    <!-- pa agregar tasks -->
+    @if (showInput()){
+        <div class="flex items-center gap-3 mb-4 p-4 bg-white rounded-xl border border-green-200/60">
+            <input
+            type="text"
+            class="flex-1 text-sm text-slate-700 outline-none bg-transparent"
+            placeholder="Let's do some work stuff !!"
+            [ngModel]="newTaskTitle()"
+            (ngModelChange)="newTaskTitle.set($event)"
+            (keydown)="onKeydown($event)"
+            />
+            <button class="px-4 py-1.5 bg-green-500 text-white text-sm font-semibold
+                            rounded-lg" (click)="addTask()">Add</button>
+            <button class="px-4 py-1.5 text-slate-500 text-sm" 
+                    (click)="cancelAdd()">Cancel</button>
+
+        </div>
+    }
+
+    <!-- empty space lololol -->
+    @if (!taskService.hasTasks() && !showInput()){
+        
+    }
+
+</section>
