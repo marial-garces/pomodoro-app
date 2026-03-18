@@ -51,3 +51,31 @@
 </section>
 
 <app-task-list/>
+
+<section class="grid grid-cols-3 gap-4 mt-8">
+
+    <div class="bg-white rounded-xl border border-green-200/60 p-5 text-center">
+        <span class="text-sm font-semibold tracking-widest text-green-600 uppercase">Focused</span>
+        <div class="text-3xl font-bold text-slate-800 mt-1">
+            {{ timer.timerStats().totalFocusedMinutes }}
+            <span class="text-base font-medium text-slate-400">min</span>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-green-200/60 p-5 text-center">
+        <span class="text-sm font-semibold tracking-widest text-green-600 uppercase">Sessions</span>
+        <div class="text-3xl font-bold text-slate-800 mt-1">
+            {{ timer.timerStats().completedSessions }}/{{ timer.timerStats().totalSessions }}
+            <span class="text-base font-medium text-slate-400">min</span>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-green-200/60 p-5 text-center">
+        <span class="text-sm font-semibold tracking-widest text-green-600 uppercase">Streak</span>
+        <div class="text-3xl font-bold text-slate-800 mt-1">
+            {{ timer.timerStats().streakDays }}
+            <span class="text-base font-medium text-slate-400">days</span>
+        </div>
+    </div>
+
+</section>

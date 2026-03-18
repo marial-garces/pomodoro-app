@@ -154,6 +154,12 @@ export class TimerService implements OnDestroy{
       const isLongBreak = current.currentSession % cfg.sessionsBeforeLongBreak === 0;
       const nextMode: TimerMode = isLongBreak ? 'longBreak' : 'shortBreak';
 
+      this.stats.update(s =>({
+        ...s,
+        totalFocusedMinutes: s.totalFocusedMinutes + this.config().pomodoro,
+        completedSessions: s.completedSessions + 1,
+      }));
+
       this.state.update(s => ({
         ...s,
         mode: nextMode,
