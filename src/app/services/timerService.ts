@@ -188,4 +188,14 @@ export class TimerService implements OnDestroy{
     }
   }
 
+  // stats && history stuff
+  private stats = signal ({
+    totalFocusedMinutes: 0,
+    completedSessions: 0,
+    totalSessions: 0,
+    streakDays: 0,
+  });
+
+  readonly timerStats = computed(() => this.stats());
+
 }

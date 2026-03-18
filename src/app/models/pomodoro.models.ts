@@ -32,3 +32,10 @@ export interface Session {
     duration: number; // in seconds
     taskId?: string; // optional reference to a task 
 }
+
+export interface Stats {
+    totalFocusedMinutes: number;
+    completedSessions: number;
+    totalSessions: number;
+    streakDays: number;
+}
