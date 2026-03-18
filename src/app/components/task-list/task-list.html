@@ -49,13 +49,25 @@
                             border-slate-200/60">
                     <button (click)="taskService.toggleComplete(task.id)">
                         @if(task.completed){
-                            <span class=""></span>
+                            <span class="text-green-500 text-xl">✓</span>
+                        } @else {
+                            <div class="w-5 h-5 rounded-full border-2 border-slate-300"></div>
                         }
                     </button>
+                    <span class="flex-1 text-sm font-medium"
+                        [class.line-through]="task.completed"
+                        [class.text-slate-400]="task.completed"
+                        [class.text-slate-700]="!task.completed">
+                        {{ task.title }}
+                    </span>
+                    <span class="text-xs font-semibold text-green-600 bg-green-50
+                                    px-2 py-0.5 rounded-md">
+                        {{ task.pomodorosCompleted }}/{{ task.pomodorosEstimated }}
+                    </span>
+                    <button class="text-slate-300 hover:text-red-400 text-sm"
+                            (click)="taskService.removeTask(task.id)">✕</button>
                 </div>
             }
-
         </div>
     }
-
 </section>
