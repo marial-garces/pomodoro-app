@@ -178,4 +178,14 @@ export class Timer implements OnDestroy{
     }
   }
 
+  // this updates the timer config
+  updateConfig(newConfig: Partial<TimerConfig>): void{
+    this.config.update(c => ({ ...c, ...newConfig }));
+    // IFF the time is IDLEE, update!!
+    if(this.state().status === 'idle'){
+      const mode = this.state().mode;
+      this.state.update(s => ({ ...s, timeRemaining: this.getTotalTime(mode) }));
+    }
+  }
+
 }
