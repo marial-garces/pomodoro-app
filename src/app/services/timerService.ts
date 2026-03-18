@@ -88,9 +88,9 @@ export class TimerService implements OnDestroy{
   toggleTimer(): void {
     const current = this.state();
     if(current.status === 'running'){
-
+      this.pause();
     }else {
-
+      this.start();
     }
   }
 
