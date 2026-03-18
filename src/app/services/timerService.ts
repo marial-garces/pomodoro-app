@@ -4,7 +4,7 @@ import { TimerMode, TimerState, TimerConfig } from '../models/pomodoro.models';
 @Injectable({
   providedIn: 'root',
 })
-export class Timer implements OnDestroy{
+export class TimerService implements OnDestroy{
   // Internal timer interval ID
   private intervalId: ReturnType<typeof setInterval> | null = null;
   

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Timer as TimerService } from '../../services/timer';
+import { TimerService as TimerService } from '../../services/timerService';
 import { TaskList } from '../task-list/task-list';
 
 @Component({
