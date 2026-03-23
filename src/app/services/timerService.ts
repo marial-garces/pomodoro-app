@@ -157,6 +157,8 @@ export class TimerService implements OnDestroy{
       this.intervalId = null;
     }
 
+    this.playNotificationSound();
+
     const current = this.state();
     if(current.mode === 'pomodoro'){
 
