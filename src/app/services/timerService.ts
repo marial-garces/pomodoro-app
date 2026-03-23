@@ -19,13 +19,13 @@ export class TimerService implements OnDestroy{
   private notificationSound: HTMLAudioElement | null = null;
   
   // Initial timer state
-  private config = signal<TimerConfig>({
-    pomodoro: 25,
-    shortBreak: 5,
-    longBreak: 15,
-    sessionsBeforeLongBreak: 4
-  });
-  // private config = signal<TimerConfig>(this.loadConfig());
+  // private config = signal<TimerConfig>({
+  //   pomodoro: 25,
+  //   shortBreak: 5,
+  //   longBreak: 15,
+  //   sessionsBeforeLongBreak: 4
+  // });
+  private config = signal<TimerConfig>(this.loadConfig());
 
   
   // Timer Status
@@ -189,15 +189,10 @@ export class TimerService implements OnDestroy{
     }
   }
 
-  ngOnDestroy(): void {
-    if(this.intervalId){
-      clearInterval(this.intervalId);
-    }
-  }
-
   // this updates the timer config
   updateConfig(newConfig: Partial<TimerConfig>): void{
     this.config.update(c => ({ ...c, ...newConfig }));
+    this.saveConfig();
     // IFF the time is IDLEE, update!!
     if(this.state().status === 'idle'){
       const mode = this.state().mode;
@@ -206,18 +201,23 @@ export class TimerService implements OnDestroy{
   }
 
   // stats && history stuff
-
-  private stats = signal ({
-    totalFocusedMinutes: 0,
-    completedSessions: 0,
-    totalSessions: 0,
-    streakDays: 0,
-  });
+  // private stats = signal ({
+  //   totalFocusedMinutes: 0,
+  //   completedSessions: 0,
+  //   totalSessions: 0,
+  //   streakDays: 0,
+  // });
+  private stats = signal (this.loadStats());
 
   readonly timerStats = computed(() => ({
      ...this.stats(),
      totalSessions: this.config().sessionsBeforeLongBreak
   }));
+
+  constructor(){
+    this.initNotificationSound();
+    this.updateStreak();
+  }
 
   // SOUND FOR notification (no external files, will modifide this laterz)
   private initNotificationSound(): void {
@@ -289,7 +289,82 @@ export class TimerService implements OnDestroy{
   }
 
   //CONFIG local storage :D
+  private loadConfig(): TimerConfig {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.config);
+      if(raw){
+        return JSON.parse(raw) as TimerConfig;
+      }
+    } catch {}
+    return {
+      pomodoro: 25,
+      shortBreak: 5,
+      longBreak: 15,
+      sessionsBeforeLongBreak: 4,
+    };
+  }
 
+  private saveConfig(): void {
+    try {
+      localStorage.setItem(STORAGE_KEYS.config, JSON.stringify(this.config()));
+    } catch{}
+  }
+
+  // LOCAL TORAR par STATS 
+  private loadStats(): Stats{
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.stats);
+      if(raw){
+        return JSON.parse(raw) as Stats;
+      }
+    }catch{}
+    return{
+      totalFocusedMinutes: 0,
+      completedSessions: 0,
+      totalSessions: 0,
+      streakDays: 0,
+    };
+  }
+
+  private saveStats(): void {
+    try{
+      localStorage.setItem(STORAGE_KEYS.stats, JSON.stringify(this.stats()));
+      localStorage.setItem(STORAGE_KEYS.lastActiveDate, new Date().toDateString());
+    }catch {}
+  }
+
+  // streak logiss
+  private updateStreak(): void {
+    try {
+      const lastDate = localStorage.getItem(STORAGE_KEYS.lastActiveDate);
+      const today = new Date().toDateString();
+
+      if(!lastDate){
+        return;
+      }
+
+      const last = new Date(lastDate);
+      const now = new Date(today);
+      const diffDays = Math.floor((now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+
+      if(diffDays === 0 ){
+        return;
+      } else if (diffDays === 1){
+        this.stats.update(s => ({ ...s, streakDays: s.streakDays + 1 }));
+        this.saveStats();
+      } else if (diffDays > 1){
+        this.stats.update(s => ({ ...s, streakDays: 0 }));
+        this.saveStats();
+      }
+    } catch {}
+  }
+
+  ngOnDestroy(): void {
+    if(this.intervalId){
+      clearInterval(this.intervalId);
+    }
+  }
+  
 
 
 }
