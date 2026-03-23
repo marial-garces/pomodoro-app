@@ -1,5 +1,13 @@
 import { Injectable, signal, computed, OnDestroy } from '@angular/core';
 import { TimerMode, TimerState, TimerConfig, Stats } from '../models/pomodoro.models';
+import { last } from 'rxjs';
+
+// for localstorage (hopes it works..)
+const STORAGE_KEYS = {
+  config: 'matchafocus_config',
+  stats: 'matchafocus_stats',
+  lastActiveDate: 'matchafocus_lastActiveDate',
+} as const;
 
 @Injectable({
   providedIn: 'root',
