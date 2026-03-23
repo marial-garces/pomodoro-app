@@ -1,4 +1,4 @@
-<section class="mt-8">
+<section class="mt-8 min-h-[200px]">
     
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-lg font-bold text-slate-800">Current Tasks</h2>
@@ -47,7 +47,8 @@
             @for(task of taskService.allTasks(); track task.id){
                 <div class="flex item-center gap-3 p-4 bg-white rounded-xl border
                             border-slate-200/60">
-                    <button (click)="taskService.toggleComplete(task.id)">
+                    <button class="w-5 h-5 flex items-center justify-center flex-shrink-0"
+                        (click)="taskService.toggleComplete(task.id)">
                         @if(task.completed){
                             <span class="text-green-500 text-xl">✓</span>
                         } @else {
