@@ -1,6 +1,5 @@
 import { Injectable, signal, computed, OnDestroy } from '@angular/core';
 import { TimerMode, TimerState, TimerConfig, Stats } from '../models/pomodoro.models';
-import { last } from 'rxjs';
 
 // for localstorage (hopes it works..)
 const STORAGE_KEYS = {
@@ -15,6 +14,9 @@ const STORAGE_KEYS = {
 export class TimerService implements OnDestroy{
   // Internal timer interval ID
   private intervalId: ReturnType<typeof setInterval> | null = null;
+
+  // NOISE for notif
+  private notificationSound: HTMLAudioElement | null = null;
   
   // Initial timer state
   private config = signal<TimerConfig>({
@@ -22,7 +24,8 @@ export class TimerService implements OnDestroy{
     shortBreak: 5,
     longBreak: 15,
     sessionsBeforeLongBreak: 4
-  })
+  });
+  // private config = signal<TimerConfig>(this.loadConfig());
 
   
   // Timer Status
@@ -215,5 +218,65 @@ export class TimerService implements OnDestroy{
      ...this.stats(),
      totalSessions: this.config().sessionsBeforeLongBreak
   }));
+
+  // SOUND FOR notification (no external files, will modifide this laterz)
+  private initNotificationSound(): void {
+    try {
+      this.notificationSound = new Audio();
+      this.notificationSound.src = this.generateBeepDataUri();
+      this.notificationSound.load();
+    } catch {
+      this.notificationSound = null;
+    }
+  }
+
+  // generates the sound
+  private generateBeepDataUri(): string {
+    const sampleRate = 8000;
+    const duration = 0.5;
+    const frequency = 800;
+    const numSamples = Math.floor(sampleRate * duration);
+    const sample = new Float32Array(numSamples);
+
+    for (let i = 0; i < numSamples; i++){
+      const t = i / sampleRate;
+      const envelope = 1 - (t / duration);
+      sample[i] = Math.sin(2 * Math.PI * frequency * t) * envelope * 0.3;
+    }
+
+    const buffer = new ArrayBuffer(44 + numSamples * 2);
+    const view = new DataView(buffer);
+
+    const writeString = (offset: number, str: string) => {
+      for (let i = 0; i < str.length; i++){
+        view.setUint8(offset + i, str.charCodeAt(i));
+      }
+    };
+
+    writeString(0, 'RIFF');
+    view.setUint32(4, 36 + numSamples * 2, true);
+    writeString(8, 'WAVE');
+    writeString(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, 1, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeString(36, 'data');
+    view.setUint32(40, numSamples * 2, true);
+
+    for (let i = 0; i < numSamples;){
+      const s = Math.max(-1, Math.min(1, sample[1]));
+      view.setInt16(44 + i * 2, s * 0x7FFF, true);
+    }
+
+    const blob = new Blob([buffer], { type: 'audio/wav' });
+    return URL.createObjectURL(blob);
+
+  }
+
+
 
 }
