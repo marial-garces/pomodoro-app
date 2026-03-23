@@ -30,6 +30,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/pomodoro-app/",
               "budgets": [
                 {
                   "type": "initial",
@@ -66,6 +67,9 @@
         },
         "test": {
           "builder": "@angular/build:unit-test"
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
