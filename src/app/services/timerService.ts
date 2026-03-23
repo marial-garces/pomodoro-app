@@ -32,7 +32,7 @@ export class TimerService implements OnDestroy{
   private state = signal<TimerState>({
     mode: 'pomodoro',
     status: 'idle',
-    timeRemaining: 25 * 60, // in seconds
+    timeRemaining: this.loadConfig().pomodoro * 60,
     currentSession: 1
   });
 
