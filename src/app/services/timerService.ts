@@ -277,6 +277,19 @@ export class TimerService implements OnDestroy{
 
   }
 
+  private playNotificationSound(): void {
+    try{
+      if(this.notificationSound){
+        this.notificationSound.currentTime = 0;
+        this.notificationSound.play().catch(() => {
+
+        });
+      }
+    } catch{}
+  }
+
+  //CONFIG local storage :D
+
 
 
 }
