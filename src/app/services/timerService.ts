@@ -267,8 +267,8 @@ export class TimerService implements OnDestroy{
     writeString(36, 'data');
     view.setUint32(40, numSamples * 2, true);
 
-    for (let i = 0; i < numSamples;){
-      const s = Math.max(-1, Math.min(1, sample[1]));
+    for (let i = 0; i < numSamples; i++){
+      const s = Math.max(-1, Math.min(1, sample[i]));
       view.setInt16(44 + i * 2, s * 0x7FFF, true);
     }
 
