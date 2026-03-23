@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, OnDestroy } from '@angular/core';
-import { TimerMode, TimerState, TimerConfig } from '../models/pomodoro.models';
+import { TimerMode, TimerState, TimerConfig, Stats } from '../models/pomodoro.models';
 
 @Injectable({
   providedIn: 'root',
@@ -195,6 +195,7 @@ export class TimerService implements OnDestroy{
   }
 
   // stats && history stuff
+
   private stats = signal ({
     totalFocusedMinutes: 0,
     completedSessions: 0,
@@ -202,6 +203,9 @@ export class TimerService implements OnDestroy{
     streakDays: 0,
   });
 
-  readonly timerStats = computed(() => this.stats());
+  readonly timerStats = computed(() => ({
+     ...this.stats(),
+     totalSessions: this.config().sessionsBeforeLongBreak
+  }));
 
 }
